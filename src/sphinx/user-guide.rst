@@ -317,7 +317,7 @@ new event in order to determine whether the new event is causally related to the
       :snippet: detecting-concurrent-update
 
 The Java code
-(`japi.ConcurrentExample <https://github.com/RBMHTechnology/eventuate/tree/master/src/sphinx/code/userguide/japi/ConcurrentExample>`_)
+(`japi.ConcurrentExample <https://github.com/RBMHTechnology/eventuate/tree/master/examples/user-guide/src/main/java/japi/ConcurrentExample>`_)
 is not executable at this time; hopefully we will address that soon.
 You can run the Scala code from the command line by typing::
 
@@ -360,7 +360,7 @@ If the sequence contains two or more elements, there is a conflict where the ele
 They can be resolved either automatically or interactively.
 
 The Java code
-(`japi.TrackingExample <https://github.com/RBMHTechnology/eventuate/tree/master/src/sphinx/code/userguide/japi/TrackingExample>`_)
+(`japi.TrackingExample <https://github.com/RBMHTechnology/eventuate/tree/master/examples/user-guide/src/main/java/japi/TrackingExample>`_)
 is not executable at this time; hopefully we will address that soon.
 You can run the Scala code from the command line by typing::
 
@@ -399,7 +399,7 @@ More advanced conflict resolution could select a winner depending on the actual 
 After selection, an application could even update the winner with the *merged* value of all conflicting versions\ [#]_.
 
 The Java code
-(`japi.ResolveExample <https://github.com/RBMHTechnology/eventuate/tree/master/src/sphinx/code/userguide/japi/ResolveExample>`_)
+(`japi.ResolveExample <https://github.com/RBMHTechnology/eventuate/tree/master/examples/user-guide/src/main/java/japi/japi/ResolveExample>`_)
 is not executable at this time; hopefully we will address that soon.
 You can run the Scala code the command line by typing::
 
@@ -430,7 +430,7 @@ with a value derived from the merge result of conflicting versions.
 Support for *atomic*, interactive conflict resolution with an application-defined merge function is planned for later Eventuate releases.
 
 The Java code
-(`japi.InteractiveResolveExample <https://github.com/RBMHTechnology/eventuate/tree/master/src/sphinx/code/userguide/japi/InteractiveResolveExample>`_)
+(`japi.InteractiveResolveExample <https://github.com/RBMHTechnology/eventuate/tree/master/examples/user-guide/src/main/java/japi/japi/InteractiveResolveExample>`_)
 is not executable at this time; hopefully we will address that soon.
 You can run the Scala code the command line by typing::
 
@@ -510,7 +510,7 @@ to the same ``eventLog``:
       :snippet: event-sourced-view
 
 The Java code
-(`japi.ViewExample <https://github.com/RBMHTechnology/eventuate/tree/master/src/sphinx/code/userguide/japi/ViewExample>`_)
+(`japi.ViewExample <https://github.com/RBMHTechnology/eventuate/tree/master/examples/user-guide/src/main/java/japi/ViewExample>`_)
 is not executable at this time; hopefully we will address that soon.
 You can run the Scala code the command line by typing::
 
@@ -562,7 +562,7 @@ view’s ``onCommand`` handler if the condition timestamp is in the *causal past
 when the view consumed the update event).
 
 The Java code
-(`japi.ConditionalExample <https://github.com/RBMHTechnology/eventuate/tree/master/src/sphinx/code/userguide/japi/ConditionalExample>`_)
+(`japi.ConditionalExample <https://github.com/RBMHTechnology/eventuate/tree/master/examples/user-guide/src/main/java/japi/ConditionalExample>`_)
 is not executable at this time; hopefully we will address that soon.
 You can run the Scala code the command line by typing::
 
@@ -612,7 +612,7 @@ The emitted ``Pong`` too isn’t consumed by its emitter but rather by the ``Pin
 The game ends when the ``PingActor`` received the 10th ``Pong``.
 
 The Java code
-(`japi.CommunicationExample <https://github.com/RBMHTechnology/eventuate/tree/master/src/sphinx/code/userguide/japi/CommunicationExample>`_)
+(`japi.CommunicationExample <https://github.com/RBMHTechnology/eventuate/tree/master/examples/user-guide/src/main/java/japi/CommunicationExample>`_)
 is not executable at this time; hopefully we will address that soon.
 You can run the Scala code the command line by typing::
 

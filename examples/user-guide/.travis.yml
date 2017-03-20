@@ -5,3 +5,7 @@ scala:
 
 jdk:
   - oraclejdk8
+
+branches:
+  only:
+  - newDocs

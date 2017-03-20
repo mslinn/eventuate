@@ -4,5 +4,5 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR/.."
 
 rm -rf target/html
-sphinx-build -b html src/sphinx/ target/html/ &> sphinx.log
+sphinx-build -b html ../../src/sphinx/ target/html/ &> sphinx.log
 
