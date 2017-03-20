@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package userguide.japi;
+package japi;
 
 import java.util.Collection;
 
@@ -23,9 +23,7 @@ import static java.util.stream.Stream.concat;
 import static java.util.stream.Stream.of;
 
 public final class DocUtils {
-
-  private DocUtils() {
-  }
+  private DocUtils() {}
 
   public static <T> Collection<T> append(Collection<T> collection, T el) {
     return concat(collection.stream(), of(el)).collect(toList());

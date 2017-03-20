@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package userguide.japi;
-
 //#automated-conflict-resolution
+
+package japi;
 
 import akka.actor.ActorRef;
 import akka.japi.pf.ReceiveBuilder;
@@ -26,20 +26,20 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Stream;
 
-import static userguide.japi.DocUtils.append;
+import static japi.DocUtils.append;
+
+// TODO turn this into a runnable example
 
 //#
 
 public class ResolveExample {
-
   public static class Auto {
-
     //#automated-conflict-resolution
 
     class ExampleActor extends AbstractEventsourcedActor {
 
       private ConcurrentVersions<Collection<String>, String> versionedState =
-        ConcurrentVersionsTree.create(Collections.emptyList(), (s, a) -> append(s, a));
+        ConcurrentVersionsTree.create(Collections.emptyList(), DocUtils::append);
 
       public ExampleActor(String id, ActorRef eventLog) {
         super(id, eventLog);
@@ -68,7 +68,6 @@ public class ResolveExample {
   }
 
   public static class Interactive {
-
     //#interactive-conflict-resolution
 
     class ExampleActor extends AbstractEventsourcedActor {
