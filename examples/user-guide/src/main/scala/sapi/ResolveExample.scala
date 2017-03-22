@@ -18,13 +18,6 @@ package sapi
 
 object ResolveExample extends App {
   import akka.actor._
-
-  case object Print
-  case class Append(entry: String)
-  case class AppendSuccess(entry: String)
-  case class AppendFailure(cause: Throwable)
-  case class Appended(entry: String)
-
   import com.rbmhtechnology.eventuate._
 
   //#automated-conflict-resolution

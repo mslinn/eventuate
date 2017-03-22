@@ -19,12 +19,6 @@ package sapi
 object TrackingExample extends App {
   import akka.actor._
 
-  case object Print
-  case class Append(entry: String)
-  case class AppendSuccess(entry: String)
-  case class AppendFailure(cause: Throwable)
-  case class Appended(entry: String)
-
   //#tracking-conflicting-versions
   import com.rbmhtechnology.eventuate.{ConcurrentVersions, EventsourcedActor, Versioned}
   import scala.collection.immutable.Seq
