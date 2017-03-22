@@ -22,17 +22,6 @@ object ActorExample extends App {
   import com.rbmhtechnology.eventuate.EventsourcedActor
   import scala.util._
 
-  // Commands
-  case object Print
-  case class Append(entry: String)
-
-  // Command replies
-  case class AppendSuccess(entry: String)
-  case class AppendFailure(cause: Throwable)
-
-  // Event
-  case class Appended(entry: String)
-
   class ExampleActor(
     override val id: String,
     override val aggregateId: Option[String],

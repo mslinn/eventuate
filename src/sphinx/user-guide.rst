@@ -108,6 +108,16 @@ ActorExample
 This code example for this section and the next is provided in the accompanying source code for this User Guide,
 in the ``ActorExample.scala`` and ``ActorExample.java`` programs.
 
+First we'll define the messages:
+
+.. tabbed-code::
+   .. includecode:: ../main/scala/sapi/Messages.scala
+      :snippet: event-sourced-actor
+   .. includecode:: ../main/java/japi/Messages.java
+      :snippet: event-sourced-actor
+
+Now the code:
+
 .. tabbed-code::
    .. includecode:: ../main/scala/sapi/ActorExample.scala
       :snippet: event-sourced-actor
