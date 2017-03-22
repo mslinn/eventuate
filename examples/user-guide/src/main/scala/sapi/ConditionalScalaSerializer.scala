@@ -31,7 +31,6 @@ object ConditionalScalaSerializer {
 }
 
 class ConditionalScalaSerializer extends SerializerWithStringManifest {
-  import org.apache.commons.lang3.SerializationUtils
   import ConditionalScalaSerializer._
 
   /** Unique identifier for your Serializer.
@@ -67,7 +66,7 @@ class ConditionalScalaSerializer extends SerializerWithStringManifest {
         longAsByteArray(count)
 
       case Resolved(selectedTimestamp) =>
-        SerializationUtils.serialize(selectedTimestamp.value.asInstanceOf[Serializable])
+        selectedTimestamp.serialize
     }
 
   /** Deserializes the given Array[Byte] using the type hint (`manifest`) */
@@ -83,7 +82,7 @@ class ConditionalScalaSerializer extends SerializerWithStringManifest {
         GetResolveCountReply(ByteBuffer.wrap(bytes).getLong)
 
       case ResolvedManifest =>
-        Resolved(SerializationUtils.deserialize(bytes))
+        Resolved(RichVectorTime.deserialize(bytes))
 
       case _ => throw new java.io.NotSerializableException
     }
