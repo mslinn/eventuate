@@ -16,7 +16,6 @@
 
 package sapi
 
-
 object CommunicationExample extends App {
   //#event-driven-communication
   import akka.actor._
@@ -28,29 +27,45 @@ object CommunicationExample extends App {
   val system: ActorSystem = ActorSystem(DefaultRemoteSystemName)
   val eventLog: ActorRef = system.actorOf(LeveldbEventLog.props("qt-1"))
 
-  case class Ping(num: Int)
-  case class Pong(num: Int)
-
   class PingActor(val id: String, val eventLog: ActorRef, completion: ActorRef)
     extends EventsourcedActor with PersistOnEvent {
 
     override def onCommand: PartialFunction[Any, Unit] = {
-      case "serve" => persist(Ping(1))(Handler.empty)
+      case "serve" =>
+        persist(Ping(1))(Handler.empty)
+
+      case x =>
+        Console.err.println(s"Error: PingActor.onCommand did not expect a $x message")
     }
 
     override def onEvent: PartialFunction[Any, Unit] = {
-      case Pong(10) if !recovering => completion ! "done"
-      case Pong(i)  => persistOnEvent(Ping(i + 1))
+      case Pong(10) if !recovering =>
+        completion ! "done"
+
+      case Pong(i)  =>
+        persistOnEvent(Ping(i + 1))
+
+      case x =>
+        // Error: PongActor.onEvent did not expect a Append(a) message
+        // Error: PingActor.onEvent did not expect a Ping(6222) message
+        // Error: PongActor.onEvent did not expect a Pong(6222) message
+        Console.err.println(s"Error: PingActor.onEvent did not expect a $x message")
     }
   }
 
   class PongActor(val id: String, val eventLog: ActorRef) extends EventsourcedActor with PersistOnEvent {
-
     override def onCommand: PartialFunction[Any, Unit] = {
       case _ =>
     }
+
     override def onEvent: PartialFunction[Any, Unit] = {
-      case Ping(i) => persistOnEvent(Pong(i))
+      case Ping(i) =>
+        persistOnEvent(Pong(i))
+
+      case x =>
+        // leftovers from running ActorExample:
+        // Error: PingActor.onEvent did not expect a Append(x) message
+        Console.err.println(s"Error: PongActor.onEvent did not expect a $x message")
     }
   }
 
