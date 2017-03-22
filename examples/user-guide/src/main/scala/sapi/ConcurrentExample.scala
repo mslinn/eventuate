@@ -18,12 +18,6 @@ package sapi
 
 /** Referenced `TrackingExample`. */
 object ConcurrentExample extends App {
-  case object Print
-  case class Append(entry: String)
-  case class AppendSuccess(entry: String)
-  case class AppendFailure(cause: Throwable)
-  case class Appended(entry: String)
-
   //#detecting-concurrent-update
   import akka.actor._
   import com.rbmhtechnology.eventuate.{EventsourcedActor, VectorTime}
