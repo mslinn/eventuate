@@ -40,7 +40,7 @@ public class ConcurrentExample {
       super(id, eventLog);
 
       setOnEvent(ReceiveBuilder
-        .match(Appended.class, evt -> {
+        .match(Messages.Appended.class, evt -> {
           if (updateTimestamp.lt(lastVectorTimestamp())) {
             // regular update
             currentState = append(currentState, evt.entry);

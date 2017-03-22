@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-//#event-sourced-actor
-
 package japi;
 
+//#event-sourced-actor
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
@@ -38,7 +37,7 @@ import static java.util.stream.Stream.concat;
 import static java.util.stream.Stream.of;
 
 class ExampleActor extends AbstractEventsourcedActor {
-
+  private Messages msgs = new Messages(); // outer class reference
   private final Optional<String> aggregateId;
 
   private Collection<String> currentState = Collections.emptyList();
@@ -48,15 +47,15 @@ class ExampleActor extends AbstractEventsourcedActor {
     this.aggregateId = aggregateId;
 
     setOnCommand(ReceiveBuilder
-      .match(Print.class, cmd -> printState(id, currentState))
-      .match(Append.class, cmd -> persist(new Appended(cmd.entry), ResultHandler.on(
-        evt -> sender().tell(new AppendSuccess(evt.entry), self()),
-        err -> sender().tell(new AppendFailure(err), self())
+      .match(Messages.Print.class, cmd -> printState(id, currentState))
+      .match(Messages.Append.class, cmd -> persist(msgs.new Appended(cmd.entry), ResultHandler.on(
+        evt -> sender().tell(msgs.new AppendSuccess(evt.entry), self()),
+        err -> sender().tell(msgs.new AppendFailure(err), self())
       )))
       .build());
 
     setOnEvent(ReceiveBuilder
-      .match(Appended.class, evt -> currentState = append(currentState, evt.entry))
+      .match(Messages.Appended.class, evt -> currentState = append(currentState, evt.entry))
       .build());
   }
 
@@ -74,49 +73,14 @@ class ExampleActor extends AbstractEventsourcedActor {
     return concat(collection.stream(), of(el)).collect(toList());
   }
 }
-
-// Commands
-class Print {}
-
-class Append {
-  public final String entry;
-
-  public Append(String entry) {
-    this.entry = entry;
-  }
-}
-
-// Command replies
-class AppendSuccess {
-  public final String entry;
-
-  public AppendSuccess(String entry) {
-    this.entry = entry;
-  }
-}
-
-class AppendFailure {
-  public final Throwable cause;
-
-  public AppendFailure(Throwable cause) {
-    this.cause = cause;
-  }
-}
-
-// Events
-class Appended {
-  public final String entry;
-
-  public Appended(String entry) {
-    this.entry = entry;
-  }
-}
 //#
 
 public class ActorExample {
   public static void main(String[] args) throws InterruptedException {
 
     //#create-one-instance
+    Messages msgs = new Messages(); // outer class reference
+
     final ActorSystem system = // ...
       //#
       ActorSystem.create(ReplicationConnection.DefaultRemoteSystemName());
@@ -131,28 +95,28 @@ public class ActorExample {
 
     final ActorRef ea1 = system.actorOf(Props.create(ExampleActor.class, () -> new ExampleActor("1", Optional.of("a"), eventLog)));
 
-    ea1.tell(new Append("a"), noSender());
-    ea1.tell(new Append("b"), noSender());
+    ea1.tell(msgs.new Append("a"), noSender());
+    ea1.tell(msgs.new Append("b"), noSender());
     //#
 
     //#print-one-instance
-    ea1.tell(new Print(), noSender());
+    ea1.tell(msgs.new Print(), noSender());
     //#
 
     //#create-two-instances
     final ActorRef b2 = system.actorOf(Props.create(ExampleActor.class, () -> new ExampleActor("2", Optional.of("b"), eventLog)));
     final ActorRef c3 = system.actorOf(Props.create(ExampleActor.class, () -> new ExampleActor("3", Optional.of("c"), eventLog)));
 
-    b2.tell(new Append("a"), noSender());
-    b2.tell(new Append("b"), noSender());
+    b2.tell(msgs.new Append("a"), noSender());
+    b2.tell(msgs.new Append("b"), noSender());
 
-    c3.tell(new Append("x"), noSender());
-    c3.tell(new Append("y"), noSender());
+    c3.tell(msgs.new Append("x"), noSender());
+    c3.tell(msgs.new Append("y"), noSender());
     //#
 
     //#print-two-instances
-    b2.tell(new Print(), noSender());
-    c3.tell(new Print(), noSender());
+    b2.tell(msgs.new Print(), noSender());
+    c3.tell(msgs.new Print(), noSender());
     //#
 
     //#create-replica-instances
@@ -162,21 +126,21 @@ public class ActorExample {
     // created at location 2
     final ActorRef d5 = system.actorOf(Props.create(ExampleActor.class, () -> new ExampleActor("5", Optional.of("d"), eventLog)));
 
-    d4.tell(new Append("a"), noSender());
+    d4.tell(msgs.new Append("a"), noSender());
     //#
 
     Thread.sleep(1000);
 
-    d4.tell(new Print(), noSender());
-    d5.tell(new Print(), noSender());
+    d4.tell(msgs.new Print(), noSender());
+    d5.tell(msgs.new Print(), noSender());
 
     //#send-another-append
-    d5.tell(new Append("b"), noSender());
+    d5.tell(msgs.new Append("b"), noSender());
     //#
 
     Thread.sleep(1000);
 
-    d4.tell(new Print(), noSender());
-    d5.tell(new Print(), noSender());
+    d4.tell(msgs.new Print(), noSender());
+    d5.tell(msgs.new Print(), noSender());
   }
 }

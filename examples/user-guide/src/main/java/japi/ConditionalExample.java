@@ -47,20 +47,21 @@ public class ConditionalExample {
   class ExampleActor extends AbstractEventsourcedActor {
     private final String id;
     private Collection<String> currentState = Collections.emptyList();
+    private Messages msgs = new Messages();
 
     public ExampleActor(String id, ActorRef eventLog) {
       super(id, eventLog);
       this.id = id;
 
       setOnCommand(ReceiveBuilder
-        .match(Append.class, cmd -> persist(new Appended(cmd.entry), ResultHandler.onSuccess(
+        .match(Append.class, cmd -> persist(msgs.new Appended(cmd.entry), ResultHandler.onSuccess(
           evt -> sender().tell(new AppendSuccess(evt.entry, lastVectorTimestamp()), self())
         )))
         // ...
         .build());
 
       setOnEvent(ReceiveBuilder
-        .match(Appended.class, evt -> currentState = append(currentState, evt.entry))
+        .match(Messages.Appended.class, evt -> currentState = append(currentState, evt.entry))
         .build());
     }
 

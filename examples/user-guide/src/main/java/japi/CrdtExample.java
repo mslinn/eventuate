@@ -26,16 +26,13 @@ import java.util.concurrent.CompletionStage;
 // TODO turn this into a runnable example
 public class CrdtExample {
   //#or-set-service
-  /**
-   * Java API of a replicated [[ORSet]] CRDT service.
-   *
-   * @param serviceId Unique id of this service.
-   * @param log Event log.
-   * @param system Actor system.
-   * @tparam A [[ORSet]] entry type.
-   */
+  /** Java API of a replicated [[ORSet]] CRDT service. */
   class ORSetService<A> extends CRDTService<ORSet<A>, Set<A>> {
 
+   /** @param serviceId Unique id of this service.
+     * @param log Event log.
+     * @param system Actor system.
+     * @tparam A [[ORSet]] entry type. */
     ORSetService(String serviceId, ActorRef log, ActorSystem system) {
       super(serviceId, log, system);
 

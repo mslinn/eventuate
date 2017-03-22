@@ -35,7 +35,6 @@ import static japi.DocUtils.append;
 public class ResolveExample {
   public static class Auto {
     //#automated-conflict-resolution
-
     class ExampleActor extends AbstractEventsourcedActor {
 
       private ConcurrentVersions<Collection<String>, String> versionedState =
@@ -45,7 +44,7 @@ public class ResolveExample {
         super(id, eventLog);
 
         setOnEvent(ReceiveBuilder
-          .match(Appended.class, evt -> {
+          .match(Messages.Appended.class, evt -> {
             versionedState = versionedState.update(evt.entry, lastVectorTimestamp(), lastSystemTimestamp(), lastEmitterId());
 
             if (versionedState.conflict()) {
@@ -92,7 +91,7 @@ public class ResolveExample {
           .build());
 
         setOnEvent(ReceiveBuilder
-          .match(Appended.class, evt ->
+          .match(Messages.Appended.class, evt ->
             versionedState = versionedState.update(evt.entry, lastVectorTimestamp(), lastSystemTimestamp(), lastEmitterId())
           )
           .match(Resolved.class, evt ->

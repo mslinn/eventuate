@@ -41,7 +41,7 @@ public class TrackingExample {
       super(id, eventLog);
 
       setOnEvent(ReceiveBuilder
-        .match(Appended.class, evt -> {
+        .match(Messages.Appended.class, evt -> {
           versionedState = versionedState.update(evt.entry, lastVectorTimestamp(), lastSystemTimestamp(), lastEmitterId());
 
           if (versionedState.conflict()) {
