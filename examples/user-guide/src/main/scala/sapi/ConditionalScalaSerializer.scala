@@ -67,8 +67,6 @@ class ConditionalScalaSerializer extends SerializerWithStringManifest {
         longAsByteArray(count)
 
       case Resolved(selectedTimestamp) =>
-        val x = selectedTimestamp.value
-        val y = selectedTimestamp.value.asInstanceOf[Serializable]
         SerializationUtils.serialize(selectedTimestamp.value.asInstanceOf[Serializable])
     }
 

@@ -22,11 +22,6 @@ object InteractiveResolveExample extends App {
   import com.rbmhtechnology.eventuate._
   import scala.collection.immutable.Seq
 
-  case object Print
-  case class AppendSuccess(entry: String)
-  case class AppendFailure(cause: Throwable)
-  case class Appended(entry: String)
-
   //#interactive-conflict-resolution
   case class Append(entry: String)
   case class AppendRejected(entry: String, conflictingVersions: Seq[Versioned[Vector[String]]])
@@ -50,8 +45,8 @@ object InteractiveResolveExample extends App {
         // ...
 
       case Resolve(selectedTimestamp) => persist(Resolved(selectedTimestamp)) {
-        case Success(evt) => // reply to sender omitted ...
-        case Failure(err) => // reply to sender omitted ...
+        case Success(event) => // reply to sender omitted ...
+        case Failure(ex) => // reply to sender omitted ...
       }
     }
 
