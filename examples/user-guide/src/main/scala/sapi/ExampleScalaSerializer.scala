@@ -17,12 +17,10 @@
 //#scala-serializer
 package sapi
 
-import java.nio.charset.StandardCharsets
 import akka.serialization._
-import scala.util.control.NoStackTrace
 
 object ExampleScalaSerializer {
-  val UTF_8: String = StandardCharsets.UTF_8.name
+  val UTF_8: String = java.nio.charset.StandardCharsets.UTF_8.name
 
   /* Case is significant for pattern matching to work. In case clauses, a term that begins with a
    * lowercase letter is assumed to be the name of a new variable that will hold an extracted value.
@@ -73,6 +71,7 @@ class ExampleScalaSerializer extends SerializerWithStringManifest {
         Append(new String(bytes, UTF_8))
 
       case AppendFailureManifest =>
+        import scala.util.control.NoStackTrace
         AppendFailure(new Throwable(new String(bytes, UTF_8)) with NoStackTrace)
 
       case AppendSuccessManifest =>
