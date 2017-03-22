@@ -16,6 +16,8 @@
 
 package sapi
 
+import org.apache.commons.lang3.SerializationUtils
+
 object InteractiveResolveExample extends App {
   import akka.actor._
   import scala.util._
@@ -23,11 +25,20 @@ object InteractiveResolveExample extends App {
   import scala.collection.immutable.Seq
 
   //#interactive-conflict-resolution
-  case class Append(entry: String)
-  case class AppendRejected(entry: String, conflictingVersions: Seq[Versioned[Vector[String]]])
+  sealed trait IreAlgebra
 
-  case class Resolve(selectedTimestamp: VectorTime)
-  case class Resolved(selectedTimestamp: VectorTime)
+  case class Append(entry: String) extends IreAlgebra
+
+  object AppendRejected {
+    def deserialize(byteArray: Array[Byte]): AppendRejected = SerializationUtils.deserialize(byteArray)
+  }
+
+  case class AppendRejected(entry: String, conflictingVersions: Seq[Versioned[Vector[String]]]) extends IreAlgebra {
+    def serialize: Array[Byte] = SerializationUtils.serialize(this.asInstanceOf[Serializable])
+  }
+
+  case class Resolve(selectedTimestamp: VectorTime) extends IreAlgebra
+  case class Resolved(selectedTimestamp: VectorTime) extends IreAlgebra
 
   class ExampleActor(
     override val id: String,

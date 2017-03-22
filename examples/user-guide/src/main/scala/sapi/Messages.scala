@@ -17,16 +17,18 @@
 package sapi
 
 //#event-sourced-actor
+sealed trait EsaAlgebra
+
 // Commands
-case object Print
-case class Append(entry: String)
+case object Print extends EsaAlgebra
+case class Append(entry: String) extends EsaAlgebra
 
 // Command replies
-case class AppendFailure(cause: Throwable)
-case class AppendSuccess(entry: String)
+case class AppendFailure(cause: Throwable) extends EsaAlgebra
+case class AppendSuccess(entry: String) extends EsaAlgebra
 
 // Event
-case class Appended(entry: String)
+case class Appended(entry: String) extends EsaAlgebra
 //#
 
 import com.rbmhtechnology.eventuate.VectorTime
