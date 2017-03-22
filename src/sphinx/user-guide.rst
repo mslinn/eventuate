@@ -556,6 +556,14 @@ For example, an application that successfully appended an entry to ``ExampleActo
 the ``appendCount`` of ``ExampleView``.
 To achieve causal read consistency, the view should delay command processing until the emitted event has been consumed by the view.
 This can be achieved with a ``ConditionalRequest``.
+First we'll define a new message:
+.. tabbed-code::
+   .. includecode:: ../main/scala/sapi/Messages.scala
+      :snippet: conditional-requests
+   .. includecode:: ../main/java/japi/Messages.java
+      :snippet: conditional-requests
+
+Now the code:
 
 .. tabbed-code::
    .. includecode:: ../main/scala/sapi/ConditionalExample.scala

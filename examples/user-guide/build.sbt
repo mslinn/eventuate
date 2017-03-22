@@ -41,6 +41,7 @@ resolvers += "Eventuate Releases" at "https://dl.bintray.com/rbmhtechnology/mave
 val evVer = "0.8.1"
 
 libraryDependencies ++= Seq(
+  "org.apache.commons" %  "commons-lang3"            % "3.5" withSources(),
   "com.rbmhtechnology" %% "eventuate-core"           % evVer withSources(),
 //  "com.rbmhtechnology" %% "eventuate-crdt"           % evVer withSources(),
   "com.rbmhtechnology" %% "eventuate-log-leveldb"    % evVer withSources(),

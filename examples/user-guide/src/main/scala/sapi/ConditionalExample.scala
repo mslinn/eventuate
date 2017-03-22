@@ -35,10 +35,6 @@ object ConditionalExample extends App {
   val eventLog: ActorRef = system.actorOf(LeveldbEventLog.props("qt-2"))
 
   //#conditional-requests
-  case class Append(entry: String)
-  case class Appended(entry: String)
-  case class AppendSuccess(entry: String, updateTimestamp: VectorTime)
-
   class ExampleActor(
     override val id: String,
     override val eventLog: ActorRef
@@ -49,7 +45,7 @@ object ConditionalExample extends App {
     override def onCommand: PartialFunction[Any, Unit] = {
       case Append(entry) => persist(Appended(entry)) {
         case Success(_) =>
-          sender() ! AppendSuccess(entry, lastVectorTimestamp)
+          sender() ! AppendSuccessWithTimestamp(entry, lastVectorTimestamp)
 
         case Failure(_) =>
           // ...
@@ -88,7 +84,7 @@ object ConditionalExample extends App {
   implicit val timeout = Timeout(5.seconds)
 
   for {
-    AppendSuccess(_, timestamp) <- ea ? Append("a")
+    AppendSuccessWithTimestamp(_, timestamp) <- ea ? Append("a")
     GetAppendCountReply(count)  <- ev ? ConditionalRequest(timestamp, GetAppendCount)
   } println(s"append count = $count")
   //#

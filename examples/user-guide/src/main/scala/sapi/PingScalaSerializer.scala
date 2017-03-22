@@ -49,8 +49,7 @@ class PingPongScalaSerializer extends SerializerWithStringManifest {
   protected def intAsByteArray(int: Int): Array[Byte] = {
     val bb: ByteBuffer = java.nio.ByteBuffer.allocate(4) // Int occupies 4 bytes
     bb.putInt(int)
-    val x = bb.array
-    x
+    bb.array
   }
 
   /** Serializes the given object to an Array[Byte] */

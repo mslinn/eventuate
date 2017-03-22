@@ -29,7 +29,7 @@ object ExampleScalaSerializer {
   val AppendManifest: String        = classOf[Append].getName        // "sapi.Append"
   val AppendedManifest: String      = classOf[Appended].getName      // "sapi.Appended"
   val AppendFailureManifest: String = classOf[AppendFailure].getName // "sapi.AppendFailure"
-  val AppendSuccessManifest: String = classOf[AppendSuccess].getName // "sapi.AppendSuccess"
+  val AppendSuccessManifest: String = classOf[AppendSuccess].getName // "sapi.AppendSuccessWithTimestamp"
   val PrintManifest: String         = Print.getClass.getName         // "sapi.Print$" note the $ at the end
 }
 

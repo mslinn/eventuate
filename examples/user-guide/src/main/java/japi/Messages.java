@@ -15,9 +15,9 @@
  */
 
 //#event-sourced-actor
-
-//#event-sourced-actor
 package japi;
+
+import com.rbmhtechnology.eventuate.VectorTime;
 
 /** Outer class allows many inner classes to be defined in one file */
 public class Messages {
@@ -57,5 +57,19 @@ public class Messages {
       this.entry = entry;
     }
   }
+//#
+//#conditional-requests
+  // Command reply
+  public class AppendSuccessWithTimestamp {
+    public final String entry;
+    public final VectorTime updateTimestamp;
+
+    public AppendSuccessWithTimestamp(String entry, VectorTime updateTimestamp) {
+      this.entry = entry;
+      this.updateTimestamp = updateTimestamp;
+    }
+  }
+//#
+//#event-sourced-actor
 }
 //#

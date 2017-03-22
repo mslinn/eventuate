@@ -22,21 +22,22 @@ object EventsourcedViews {
   import akka.actor.ActorRef
   import com.rbmhtechnology.eventuate.{EventsourcedView, VectorTime}
 
-  case class Appended(entry: String)
-  case class Resolved(selectedTimestamp: VectorTime)
+  sealed trait EventSourcedMsg
 
-  case object GetAppendCount
-  case class GetAppendCountReply(count: Long)
+  case class Resolved(selectedTimestamp: VectorTime) extends EventSourcedMsg
 
-  case object GetResolveCount
-  case class GetResolveCountReply(count: Long)
+  case object GetAppendCount extends EventSourcedMsg
+  case class GetAppendCountReply(count: Long) extends EventSourcedMsg
+
+  case object GetResolveCount extends EventSourcedMsg
+  case class GetResolveCountReply(count: Long) extends EventSourcedMsg
 
   class ExampleView(override val id: String, override val eventLog: ActorRef) extends EventsourcedView {
     private var appendCount: Long = 0L
     private var resolveCount: Long = 0L
 
     override def onCommand: PartialFunction[Any, Unit] = {
-      case GetAppendCount => sender() ! GetAppendCountReply(appendCount)
+      case GetAppendCount  => sender() ! GetAppendCountReply(appendCount)
       case GetResolveCount => sender() ! GetResolveCountReply(resolveCount)
     }
 

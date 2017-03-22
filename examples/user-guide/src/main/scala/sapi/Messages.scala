@@ -28,3 +28,8 @@ case class AppendSuccess(entry: String)
 // Event
 case class Appended(entry: String)
 //#
+
+import com.rbmhtechnology.eventuate.VectorTime
+//#conditional-requests
+case class AppendSuccessWithTimestamp(entry: String, updateTimestamp: VectorTime)
+//#

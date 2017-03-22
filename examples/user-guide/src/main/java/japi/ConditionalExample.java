@@ -28,9 +28,6 @@ import akka.pattern.Patterns;
 import akka.util.Timeout;
 import com.rbmhtechnology.eventuate.*;
 import scala.concurrent.ExecutionContextExecutor;
-import scala.concurrent.Future;
-import scala.reflect.ClassTag;
-import scala.reflect.ClassTag$;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -54,8 +51,8 @@ public class ConditionalExample {
       this.id = id;
 
       setOnCommand(ReceiveBuilder
-        .match(Append.class, cmd -> persist(msgs.new Appended(cmd.entry), ResultHandler.onSuccess(
-          evt -> sender().tell(new AppendSuccess(evt.entry, lastVectorTimestamp()), self())
+        .match(Messages.Append.class, cmd -> persist(msgs.new Appended(cmd.entry), ResultHandler.onSuccess(
+          evt -> sender().tell(msgs.new AppendSuccessWithTimestamp(evt.entry, lastVectorTimestamp()), self())
         )))
         // ...
         .build());
@@ -71,29 +68,8 @@ public class ConditionalExample {
     }
   }
 
-  // Command
-  public class Append {
-    public final String entry;
-
-    public Append(String entry) {
-      this.entry = entry;
-    }
-  }
-
-  // Command reply
-  public class AppendSuccess {
-    public final String entry;
-    public final VectorTime updateTimestamp;
-
-    public AppendSuccess(String entry, VectorTime updateTimestamp) {
-      this.entry = entry;
-      this.updateTimestamp = updateTimestamp;
-    }
-  }
-
   // Eventsourced-View
   class ExampleView extends AbstractEventsourcedView {
-
     // AbstractEventsourcedView has ConditionalRequests mixed-in by default
 
     public ExampleView(String id, ActorRef eventLog) {
@@ -111,15 +87,16 @@ public class ConditionalExample {
     //#conditional-requests
 
     ConditionalExample ce = new ConditionalExample();
+    Messages msgs = new Messages();
     final ActorRef ea = system.actorOf(Props.create(ExampleActor.class, () -> ce.new ExampleActor("ea", eventLog)));
     final ActorRef ev = system.actorOf(Props.create(ExampleView.class, () -> ce.new ExampleView("ev", eventLog)));
 
     final Timeout timeout = Timeout.apply(5, TimeUnit.SECONDS);
 
-    Patterns.ask(ea, ce.new Append("a"), timeout)
+    Patterns.ask(ea, msgs.new Append("a"), timeout)
       .flatMap(func(m ->
           Patterns.ask(ev,
-              new ConditionalRequest(((AppendSuccess) m).updateTimestamp, ce.new GetAppendCount()), timeout)
+              new ConditionalRequest(((Messages.AppendSuccessWithTimestamp) m).updateTimestamp, ce.new GetAppendCount()), timeout)
           )
         , dispatcher)
       .onComplete(proc(result -> {
